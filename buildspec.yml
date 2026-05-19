@@ -8,11 +8,11 @@ phases:
     commands:
       - echo Logging in to ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest
+      - export IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:latest
   build:
     commands:
       - echo Building Spring Boot app...
-      - mvn package -DskipTests
+      - ./mvnw package -DskipTests
       - echo Building Docker image...
       - docker build -t $ECR_REPO_NAME .
       - docker tag $ECR_REPO_NAME:latest $IMAGE_URI
